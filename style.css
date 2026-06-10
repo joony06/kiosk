@@ -101,10 +101,13 @@ html, body {
 .search-wrap {
   display: flex;
   align-items: center;
+  margin: 10px 14px;
   padding: 0 14px;
-  border-left: 1.5px solid #e0e0e0;
   gap: 8px;
   flex-shrink: 0;
+  background: #f4f4f4;
+  border-radius: 30px;
+  border: 1.5px solid #e0e0e0;
 }
 .search-icon {
   font-size: 22px;
@@ -114,9 +117,10 @@ html, body {
   outline: none;
   font-size: 20px;
   font-family: inherit;
-  width: 180px;
+  width: 160px;
   color: #222;
   background: transparent;
+  padding: 10px 0;
 }
 .search-input::placeholder {
   color: #bbb;
