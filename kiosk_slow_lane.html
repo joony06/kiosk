@@ -117,22 +117,30 @@
 
       function showOv() {
         document.getElementById("overlay").classList.add("visible");
+        document.getElementById("ks-root").classList.add("help-active");
+        const notice = document.getElementById("notice");
+        notice.textContent = "원격 도움 중입니다";
+        notice.classList.add("help-active");
       }
       function closeOv() {
         document.getElementById("overlay").classList.remove("visible");
+        document.getElementById("ks-root").classList.remove("help-active");
+        const notice = document.getElementById("notice");
+        notice.textContent = "천천히 둘러보세요  ·  모르시면 아래 버튼을 눌러주세요";
+        notice.classList.remove("help-active");
       }
 
       document.addEventListener("DOMContentLoaded", () => renderMenus("coffee"));
     </script>
     <div style="width:100%;height:100%;display:flex;align-items:stretch;">
       <div style="width:100%;">
-        <div class="ks">
+        <div class="ks" id="ks-root">
           <div class="top-bar">
             <div class="brand">OO카페</div>
             <div class="slow-badge">느린 구역<br />SLOW LANE</div>
           </div>
-          <div class="notice">
-            원격 도움 중입니다
+          <div class="notice" id="notice">
+            천천히 둘러보세요 &nbsp;·&nbsp; 모르시면 아래 버튼을 눌러주세요
           </div>
 
           <div class="cat-row">
