@@ -54,15 +54,6 @@
         ],
       };
 
-      function selCat(el, cat) {
-        document
-          .querySelectorAll(".cat-btn")
-          .forEach((b) => b.classList.remove("active"));
-        el.classList.add("active");
-        renderMenus(cat);
-        goBack();
-      }
-
       function renderMenus(cat) {
         document.getElementById("menu-grid").innerHTML = menus[cat]
           .map((m) => {
@@ -88,6 +79,35 @@
         if (desc) { descEl.innerHTML = desc.replace(/\n/g, "<br>"); descEl.style.display = "block"; } else { descEl.style.display = "none"; }
         document.getElementById("menu-area").classList.add("hidden");
         document.getElementById("opt-screen").classList.add("visible");
+      }
+
+      let currentCat = 'coffee';
+
+      const _selCatOrig = selCat;
+      function selCat(el, cat) {
+        currentCat = cat;
+        document.getElementById('search-input').value = '';
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        renderMenus(cat);
+        goBack();
+      }
+
+      function filterMenus(q) {
+        const all = Object.values(menus).flat();
+        const results = q.trim()
+          ? all.filter(m => m.n.includes(q.trim()))
+          : menus[currentCat];
+        document.getElementById('menu-grid').innerHTML = results.map(m => {
+          const imgTag = m.img
+            ? `<img class="menu-img" src="${m.img}" alt="${m.n}">`
+            : `<div class="menu-emoji">${m.e}</div>`;
+          return `<div class="menu-card" onclick="selMenu('${m.n}','${m.p}',${!!m.opt},'${m.img||''}','${(m.desc||'').replace(/\n/g,'\\n')}')">
+      ${imgTag}
+      <div class="menu-name">${m.n}</div>
+      <div class="menu-price">${m.p}</div>
+    </div>`;
+        }).join('');
       }
 
       let cartCount = 0;
@@ -139,13 +159,19 @@
             천천히 둘러보세요 &nbsp;·&nbsp; 모르시면 아래 버튼을 눌러주세요
           </div>
 
-          <div class="cat-row">
-            <button class="cat-btn active" onclick="selCat(this, 'coffee')">커피<span class="cat-en">Coffee</span></button>
-            <button class="cat-btn" onclick="selCat(this, 'tea')">차<span class="cat-en">Tea</span></button>
-            <button class="cat-btn" onclick="selCat(this, 'ade')">에이드<span class="cat-en">Ade</span></button>
-            <button class="cat-btn" onclick="selCat(this, 'smoothie')">스무디<span class="cat-en">Smoothie</span></button>
-            <button class="cat-btn" onclick="selCat(this, 'fruit')">과일 음료<span class="cat-en">Fruit</span></button>
-            <button class="cat-btn" onclick="selCat(this, 'dessert')">디저트<span class="cat-en">Dessert</span></button>
+          <div class="cat-bar">
+            <div class="cat-row">
+              <button class="cat-btn active" onclick="selCat(this, 'coffee')">커피<span class="cat-en">Coffee</span></button>
+              <button class="cat-btn" onclick="selCat(this, 'tea')">차<span class="cat-en">Tea</span></button>
+              <button class="cat-btn" onclick="selCat(this, 'ade')">에이드<span class="cat-en">Ade</span></button>
+              <button class="cat-btn" onclick="selCat(this, 'smoothie')">스무디<span class="cat-en">Smoothie</span></button>
+              <button class="cat-btn" onclick="selCat(this, 'fruit')">과일 음료<span class="cat-en">Fruit</span></button>
+              <button class="cat-btn" onclick="selCat(this, 'dessert')">디저트<span class="cat-en">Dessert</span></button>
+            </div>
+            <div class="search-wrap">
+              <span class="search-icon">🔍</span>
+              <input class="search-input" id="search-input" type="text" placeholder="메뉴 검색" oninput="filterMenus(this.value)">
+            </div>
           </div>
 
           <div class="menu-area" id="menu-area">
