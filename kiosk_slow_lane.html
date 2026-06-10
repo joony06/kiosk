@@ -124,10 +124,6 @@
       }
       function closeOv() {
         document.getElementById("overlay").classList.remove("visible");
-        document.getElementById("ks-root").classList.remove("help-active");
-        const notice = document.getElementById("notice");
-        notice.textContent = "천천히 둘러보세요  ·  모르시면 아래 버튼을 눌러주세요";
-        notice.classList.remove("help-active");
       }
 
       document.addEventListener("DOMContentLoaded", () => renderMenus("coffee"));
