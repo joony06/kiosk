@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const menus = {
+        coffee: [
+          { img: "커피/아메리카노.png", n: "아메리카노", p: "4,500원" },
+          { img: "커피/카페라떼.png", n: "카페라떼", p: "5,000원" },
+          { img: "커피/바닐라라떼.png", n: "바닐라라떼", p: "5,500원" },
+          { img: "커피/카페모카.png", n: "카페모카", p: "5,500원" },
+        ],
+        fruit: [
+          { img: "과일 음료/망고주스.png", n: "망고주스", p: "6,000원" },
+          { img: "과일 음료/수박주스.png", n: "수박주스", p: "6,000원" },
+          { img: "과일 음료/바나나주스.png", n: "바나나주스", p: "5,500원" },
+          { img: "과일 음료/피치딸기 피지오.png", n: "피치딸기 피지오", p: "6,500원" },
+          { img: "과일 음료/유자차.png", n: "유자차", p: "5,500원", opt: true, desc: "상큼한 유자의 향과 함께 깊은 생강의 맛을 즐길 수 있는 차\n* 카페인 FREE" },
+        ],
+        ade: [
+          { e: "🍋", n: "레몬에이드", p: "5,000원" },
+          { e: "🍈", n: "청포도에이드", p: "5,500원" },
+          { e: "🌸", n: "복숭아에이드", p: "5,500원" },
+          { e: "🍓", n: "딸기에이드", p: "5,500원" },
+        ],
+        smoothie: [
+          { e: "🥭", n: "망고스무디", p: "6,500원" },
+          { e: "🫐", n: "블루베리스무디", p: "6,500원" },
+          { e: "🍌", n: "바나나스무디", p: "6,000원" },
+          { e: "🥝", n: "키위스무디", p: "6,500원" },
+        ],
+        tea: [
+          { img: "차/얼그레이티.png", n: "얼그레이티", p: "4,500원" },
+          { img: "차/캐모마일티.png", n: "캐모마일티", p: "4,500원" },
+          { img: "차/자몽허니 블랙티.png", n: "자몽허니 블랙티", p: "5,500원" },
+          { img: "차/유즈베리 티.png", n: "유즈베리 티", p: "5,500원" },
+          { img: "차/복숭아 아이스티.png", n: "복숭아 아이스티", p: "5,000원" },
+        ],
+        dessert: [
+          { e: "🧁", n: "컵케이크", p: "4,000원" },
+          { e: "🍰", n: "치즈케이크", p: "6,500원" },
+          { e: "🍩", n: "도넛", p: "3,500원" },
+          { e: "🥐", n: "크루아상", p: "4,000원" },
+        ],
+      };
+
+      function selCat(el, cat) {
+        document
+          .querySelectorAll(".cat-btn")
+          .forEach((b) => b.classList.remove("active"));
+        el.classList.add("active");
+        renderMenus(cat);
+        goBack();
+      }
+
+      function renderMenus(cat) {
+        document.getElementById("menu-grid").innerHTML = menus[cat]
+          .map((m) => {
+            const imgTag = m.img
+              ? `<img class="menu-img" src="${m.img}" alt="${m.n}">`
+              : `<div class="menu-emoji">${m.e}</div>`;
+            return `<div class="menu-card" onclick="selMenu('${m.n}','${m.p}',${!!m.opt},'${m.img||''}','${(m.desc||'').replace(/\n/g,'\\n')}')">
+      ${imgTag}
+      <div class="menu-name">${m.n}</div>
+      <div class="menu-price">${m.p}</div>
+    </div>`;
+          })
+          .join("");
+      }
+
+      function selMenu(name, price, hasOpt, img, desc) {
+        if (!hasOpt) return;
+        document.getElementById("opt-title").textContent = name;
+        document.getElementById("opt-price").textContent = price;
+        const imgEl = document.getElementById("opt-img");
+        if (img) { imgEl.src = img; imgEl.style.display = "block"; } else { imgEl.style.display = "none"; }
+        const descEl = document.getElementById("opt-desc");
+        if (desc) { descEl.innerHTML = desc.replace(/\n/g, "<br>"); descEl.style.display = "block"; } else { descEl.style.display = "none"; }
+        document.getElementById("menu-area").classList.add("hidden");
+        document.getElementById("opt-screen").classList.add("visible");
+      }
+
+      function goBack() {
+        document.getElementById("menu-area").classList.remove("hidden");
+        document.getElementById("opt-screen").classList.remove("visible");
+      }
+
+      function pick(el, group) {
+        el.closest(".chips")
+          .querySelectorAll(".chip")
+          .forEach((c) => c.classList.remove("sel-green", "sel-red"));
+        el.classList.add(
+          group === "temp" && el.textContent.includes("따뜻")
+            ? "sel-red"
+            : "sel-green",
+        );
+      }
+
+      function showOv() {
+        document.getElementById("overlay").classList.add("visible");
+      }
+      function closeOv() {
+        document.getElementById("overlay").classList.remove("visible");
+      }
+
+      document.addEventListener("DOMContentLoaded", () => renderMenus("coffee"));
+    </script>
+    <div style="padding: 1rem 0.5rem 2rem; background: #f0f0f0">
+      <div>
+        <div class="ks">
+          <div class="top-bar">
+            <div class="brand">OO카페</div>
+            <div class="slow-badge">느린 구역<br />SLOW LANE</div>
+          </div>
+          <div class="notice">
+            천천히 둘러보세요 &nbsp;·&nbsp; 모르시면 아래 버튼을 눌러주세요
+          </div>
+
+          <div class="cat-row">
+            <button class="cat-btn active" onclick="selCat(this, 'coffee')">커피<span class="cat-en">Coffee</span></button>
+            <button class="cat-btn" onclick="selCat(this, 'tea')">차<span class="cat-en">Tea</span></button>
+            <button class="cat-btn" onclick="selCat(this, 'ade')">에이드<span class="cat-en">Ade</span></button>
+            <button class="cat-btn" onclick="selCat(this, 'smoothie')">스무디<span class="cat-en">Smoothie</span></button>
+            <button class="cat-btn" onclick="selCat(this, 'fruit')">과일 음료<span class="cat-en">Fruit</span></button>
+            <button class="cat-btn" onclick="selCat(this, 'dessert')">디저트<span class="cat-en">Dessert</span></button>
+          </div>
+
+          <div class="menu-area" id="menu-area">
+            <div class="menu-grid" id="menu-grid"></div>
+          </div>
+
+          <div class="opt-screen" id="opt-screen">
+            <div class="opt-header">
+              <button class="back-btn" onclick="goBack()">← 뒤로</button>
+              <div class="opt-title" id="opt-title">유자차</div>
+              <div class="opt-price" id="opt-price">5,500원</div>
+            </div>
+            <div class="opt-preview">
+              <img id="opt-img" class="opt-preview-img" src="" alt="" style="display:none">
+              <div id="opt-desc" class="opt-preview-desc" style="display:none"></div>
+            </div>
+            <div class="opt-body">
+              <div class="opt-sec">
+                <div class="opt-sec-title">온도</div>
+                <div class="chips">
+                  <button class="chip" onclick="pick(this, 'temp')">
+                    따뜻하게(Hot)
+                  </button>
+                  <button class="chip" onclick="pick(this, 'temp')">
+                    차갑게(Cold)
+                  </button>
+                </div>
+              </div>
+              <div class="opt-sec">
+                <div class="opt-sec-title">사이즈</div>
+                <div class="chips">
+                  <button class="chip" onclick="pick(this, 'size')">
+                    작은 컵 (S)
+                  </button>
+                  <button class="chip" onclick="pick(this, 'size')">
+                    기본 컵 (M)
+                  </button>
+                  <button class="chip" onclick="pick(this, 'size')">
+                    큰 컵 (L)
+                  </button>
+                </div>
+              </div>
+              <div class="opt-sec">
+                <div class="opt-sec-title">당도</div>
+                <div class="chips">
+                  <button class="chip" onclick="pick(this, 'sugar')">
+                    안 달게
+                  </button>
+                  <button class="chip" onclick="pick(this, 'sugar')">
+                    기본
+                  </button>
+                  <button class="chip" onclick="pick(this, 'sugar')">
+                    달게
+                  </button>
+                  <button class="chip" onclick="pick(this, 'sugar')">
+                    아주 달게
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="cart-bar" onclick="goBack()">담기</div>
+          </div>
+
+          <button class="cart-fab-btn">🛒</button>
+          <button class="remote-help-btn" onclick="showOv()">원격<br>도움</button>
+
+          <div class="overlay" id="overlay">
+            <div class="ov-card">
+              <div class="ov-icon">📞</div>
+              <div class="ov-title">도움을 요청했어요</div>
+              <div class="ov-sub">
+                잠시만 기다려 주세요.<br />직원이 곧 도와드릴게요.
+              </div>
+              <button class="ov-close" onclick="closeOv()">닫기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
